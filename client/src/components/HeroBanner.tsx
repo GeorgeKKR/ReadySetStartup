@@ -84,7 +84,15 @@ const HeroBanner: React.FC = () => {
           muted={videoMuted}
           playsInline
           poster="/assets/images/RSS Background.jpg"
+          onError={(e) => {
+            // Hide video element if there's an error loading the sources
+            if (e.currentTarget) {
+              e.currentTarget.style.display = 'none';
+            }
+          }}
         >
+          {/* Video sources - these may be excluded from GitHub due to size limitations */}
+          {/* If you're deploying this project, you'll need to add these video files separately */}
           <source src="/assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />
           <source src="/assets/videos/Trailer.mp4" type="video/mp4" />
         </video>
