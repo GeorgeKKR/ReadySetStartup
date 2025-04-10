@@ -65,9 +65,9 @@ const HeroBanner: React.FC = () => {
 
   return (
     <section className="relative pt-16 md:pt-0 h-screen overflow-hidden">
-      {/* Video background */}
+      {/* Background */}
       <div className="absolute inset-0 w-full h-full overflow-hidden">
-        {/* Background image - always visible */}
+        {/* Background image */}
         <motion.div 
           className="absolute inset-0 w-full h-[120%]"
           style={{ y: isMounted ? backgroundY : 0 }}
@@ -75,7 +75,7 @@ const HeroBanner: React.FC = () => {
           <div className="w-full h-full bg-[url('/assets/images/RSS Background.jpg')] bg-cover bg-center transform scale-110" />
         </motion.div>
         
-        {/* Video background using local MP4 file */}
+        {/* Video background */}
         <video
           ref={backgroundVideoRef}
           className="absolute inset-0 w-full h-full object-cover z-[1]"
@@ -84,10 +84,8 @@ const HeroBanner: React.FC = () => {
           muted={videoMuted}
           playsInline
           poster="/assets/images/RSS Background.jpg"
-          style={{ opacity: 0.9 }}
         >
-          <source src="/Trailer - Season 1_ Ready Set StartUP UK.mp4" type="video/mp4" />
-          <source src="/Trailer - Season 1_ Ready Set StartUP UK.webm" type="video/webm" />
+          <source src="/assets/videos/Trailer.mp4" type="video/mp4" />
         </video>
       </div>
       

@@ -56,15 +56,6 @@ const SimplifiedCastSection: React.FC = () => {
   return (
     <section id="cast" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
-        <ScrollReveal direction="up" className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-center">
-            Meet <span className="text-accent">The Cast</span>
-          </h2>
-          <p className="text-center mt-4 text-gray-300 max-w-2xl mx-auto">
-            Ready Set StartUP UK features prominent industry veterans as judges and mentors, guiding and investing in the next generation of British entrepreneurs with game-changing business ideas.
-          </p>
-        </ScrollReveal>
-        
         {/* Judges */}
         <div className="mb-16">
           <div className="flex items-center mb-8">

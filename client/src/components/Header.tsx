@@ -3,9 +3,6 @@ import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
-// For GitHub Pages deployment
-const basePath = import.meta.env.PROD ? '/ReadySetStartup' : '';
-
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,12 +28,12 @@ const Header: React.FC = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navLinks = [
-    { name: 'Seasons', path: `${basePath}/seasons` },
-    { name: 'Judges', path: `${basePath}/judges` },
-    { name: 'Mentors', path: `${basePath}/mentors` },
-    { name: 'Clips', path: `${basePath}/clips` },
-    { name: 'Resources', path: `${basePath}/resources` },
-    { name: 'Apply', path: `${basePath}/apply` },
+    { name: 'Seasons', path: '/seasons' },
+    { name: 'Judges', path: '/judges' },
+    { name: 'Mentors', path: '/mentors' },
+    { name: 'Clips', path: '/clips' },
+    { name: 'Resources', path: '/resources' },
+    { name: 'Apply', path: '/apply' },
   ];
 
   return (
@@ -48,9 +45,9 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-2 flex flex-col md:flex-row items-center justify-between">
         {/* Logo */}
         <div className="flex items-center justify-between w-full md:w-auto">
-          <Link href={`${basePath}/`} className="flex items-center">
+          <Link href="/" className="flex items-center">
             <img 
-              src="./assets/logos/LogoRssWhite.png" 
+              src="/assets/logos/LogoRssWhite.png" 
               alt="Ready Set StartUP UK Logo" 
               className="h-10 md:h-12"
             />

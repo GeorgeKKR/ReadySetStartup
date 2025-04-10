@@ -17,9 +17,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 
-// For GitHub Pages deployment
-const basePath = import.meta.env.PROD ? '/ReadySetStartup' : '';
-
 function Router() {
   const [location] = useLocation();
   
@@ -28,42 +25,42 @@ function Router() {
       <Header />
       <AnimatePresence mode="wait">
         <Switch location={location} key={location}>
-          <Route path={`${basePath}/`}>
+          <Route path="/">
             <PageTransition>
               <Home />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/seasons`}>
+          <Route path="/seasons">
             <PageTransition>
               <Seasons />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/cast`}>
+          <Route path="/cast">
             <PageTransition>
               <Cast />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/judges`}>
+          <Route path="/judges">
             <PageTransition>
               <Judges />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/mentors`}>
+          <Route path="/mentors">
             <PageTransition>
               <Mentors />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/clips`}>
+          <Route path="/clips">
             <PageTransition>
               <Clips />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/resources`}>
+          <Route path="/resources">
             <PageTransition>
               <Resources />
             </PageTransition>
           </Route>
-          <Route path={`${basePath}/apply`}>
+          <Route path="/apply">
             <PageTransition>
               <Apply />
             </PageTransition>
