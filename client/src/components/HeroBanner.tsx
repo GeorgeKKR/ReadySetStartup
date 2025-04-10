@@ -85,6 +85,7 @@ const HeroBanner: React.FC = () => {
           playsInline
           poster="/assets/images/RSS Background.jpg"
         >
+          <source src="/assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />
           <source src="/assets/videos/Trailer.mp4" type="video/mp4" />
         </video>
       </div>
