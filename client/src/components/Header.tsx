@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'wouter';
+import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
@@ -45,13 +45,13 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-2 flex flex-col md:flex-row items-center justify-between">
         {/* Logo */}
         <div className="flex items-center justify-between w-full md:w-auto">
-          <Link href="/" className="flex items-center">
+          <a href="/ReadySetStartup/" className="flex items-center">
             <img 
               src="/ReadySetStartup/assets/logos/LogoRssWhite.png" 
               alt="Ready Set StartUP UK Logo" 
               className="h-10 md:h-12"
             />
-          </Link>
+          </a>
           <button 
             className="md:hidden text-foreground text-xl"
             onClick={toggleMenu}
@@ -64,15 +64,15 @@ const Header: React.FC = () => {
         {/* Navigation - increased text size to text-lg */}
         <nav className="hidden md:flex items-center space-x-8 text-lg font-semibold mt-4 md:mt-0">
           {navLinks.map((link) => (
-            <Link 
+            <a 
               key={link.path} 
-              href={link.path}
+              href={`/ReadySetStartup${link.path}`}
               className={`hover:text-[hsl(var(--accent-secondary))] transition-colors ${
                 location === link.path ? 'text-[hsl(var(--accent-secondary))]' : ''
               }`}
             >
               {link.name}
-            </Link>
+            </a>
           ))}
         </nav>
         
@@ -101,16 +101,16 @@ const Header: React.FC = () => {
           >
             <div className="px-4 py-2 space-y-3">
               {navLinks.map((link) => (
-                <Link 
+                <a 
                   key={link.path} 
-                  href={link.path}
+                  href={`/ReadySetStartup${link.path}`}
                   className={`block py-2 text-lg hover:text-[hsl(var(--accent-secondary))] ${
                     location === link.path ? 'text-[hsl(var(--accent-secondary))]' : ''
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
-                </Link>
+                </a>
               ))}
               <a 
                 href="https://www.amazon.co.uk/gp/video/detail/amzn1.dv.gti.6346669a-7e09-4a55-9dc0-0e8f93a30ecc" 
