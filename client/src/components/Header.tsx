@@ -47,7 +47,7 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between w-full md:w-auto">
           <Link href="/" className="flex items-center">
             <img 
-              src="/assets/logos/LogoRssWhite.png" 
+              src="/ReadySetStartup/assets/logos/LogoRssWhite.png" 
               alt="Ready Set StartUP UK Logo" 
               className="h-10 md:h-12"
             />

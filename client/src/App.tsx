@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { queryClient } from "./lib/queryClient";
 import { AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
 import Home from "@/pages/Home";
 import Seasons from "@/pages/Seasons";
@@ -19,6 +20,18 @@ import PageTransition from "@/components/PageTransition";
 
 function Router() {
   const [location] = useLocation();
+  
+  // Handle GitHub Pages base path
+  useEffect(() => {
+    // If we're on GitHub Pages and the URL doesn't have the base path
+    const basePath = "/ReadySetStartup";
+    const currentPath = window.location.pathname;
+    
+    // If we're on the 404 page at GitHub Pages root
+    if (currentPath === "/404.html" || currentPath === "/ReadySetStartup/404.html") {
+      window.location.href = `${basePath}/`;
+    }
+  }, []);
   
   return (
     <>
