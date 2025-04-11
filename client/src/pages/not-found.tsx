@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Home } from "lucide-react";
-import AppLink from "@/components/AppLink";
 import { motion } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnimatedCard from "@/components/AnimatedCard";
@@ -48,7 +47,7 @@ export default function NotFound() {
         
         <AnimatedCard hoverEffect="all" className="inline-block">
           <Button asChild size="lg" variant="default" className="px-6">
-            <a href="/ReadySetStartup/" className="flex items-center gap-2">
+            <a href="/ReadySetStartup/#/" className="flex items-center gap-2">
               <Home size={18} />
               <span>Back to Home</span>
             </a>

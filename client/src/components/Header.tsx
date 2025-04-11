@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useHashLocation } from '@/lib/useHashLocation';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location] = useLocation();
+  const [location] = useHashLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-2 flex flex-col md:flex-row items-center justify-between">
         {/* Logo */}
         <div className="flex items-center justify-between w-full md:w-auto">
-          <a href="/ReadySetStartup/" className="flex items-center">
+          <a href="/ReadySetStartup/#/" className="flex items-center">
             <img 
               src="/ReadySetStartup/assets/logos/LogoRssWhite.png" 
               alt="Ready Set StartUP UK Logo" 
@@ -66,7 +66,7 @@ const Header: React.FC = () => {
           {navLinks.map((link) => (
             <a 
               key={link.path} 
-              href={`/ReadySetStartup${link.path}`}
+              href={`/ReadySetStartup/#${link.path}`}
               className={`hover:text-[hsl(var(--accent-secondary))] transition-colors ${
                 location === link.path ? 'text-[hsl(var(--accent-secondary))]' : ''
               }`}
@@ -103,7 +103,7 @@ const Header: React.FC = () => {
               {navLinks.map((link) => (
                 <a 
                   key={link.path} 
-                  href={`/ReadySetStartup${link.path}`}
+                  href={`/ReadySetStartup/#${link.path}`}
                   className={`block py-2 text-lg hover:text-[hsl(var(--accent-secondary))] ${
                     location === link.path ? 'text-[hsl(var(--accent-secondary))]' : ''
                   }`}

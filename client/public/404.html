@@ -4,20 +4,36 @@
   <meta charset="utf-8">
   <title>Ready Set StartUP UK</title>
   <script type="text/javascript">
-    // Redirect to index with the original path in the query
+    // SPA routing for GitHub Pages
+    // Based on https://github.com/rafgraph/spa-github-pages
     (function() {
-      var path = window.location.pathname;
-      if (path.indexOf('/ReadySetStartup/') === 0) {
-        path = path.replace('/ReadySetStartup/', '');
-      }
+      // This works for GitHub Pages when a custom domain is not used
+      const segmentCount = 1;
+      const l = window.location;
       
-      // Check if we're already on the 404.html page
-      if (path === '/404.html' || path === '404.html') {
-        path = '';
-      }
+      // Extract the path from either a direct 404 on a path or from the path query parameter
+      const extractPath = () => {
+        // Check if we're being redirected with a path parameter
+        const pathParam = l.search.match(/(\?|&)path=([^&]+)/);
+        if (pathParam) return decodeURIComponent(pathParam[2]);
+        
+        // Otherwise, use the actual path but remove the /ReadySetStartup prefix if present
+        const path = l.pathname;
+        if (path.indexOf('/ReadySetStartup/') === 0) {
+          return path.replace('/ReadySetStartup/', '');
+        }
+        return path.replace('/ReadySetStartup', '');
+      };
       
-      window.location.href = '/ReadySetStartup/' + 
-        (path ? '?path=' + encodeURIComponent(path) : '');
+      const path = extractPath();
+      
+      // Redirect to the home page with the correct segment configuration
+      const redirectUrl = 
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/' +
+        (path ? '#' + path : '');
+      
+      window.location.replace(redirectUrl);
     })();
   </script>
 </head>

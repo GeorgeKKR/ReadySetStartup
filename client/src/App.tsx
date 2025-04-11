@@ -1,9 +1,10 @@
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { queryClient } from "./lib/queryClient";
 import { AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { useHashLocation } from "@/lib/useHashLocation";
 
 import Home from "@/pages/Home";
 import Seasons from "@/pages/Seasons";
@@ -19,17 +20,21 @@ import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 
 function Router() {
-  const [location] = useLocation();
+  // Use hash-based routing for GitHub Pages
+  const [location] = useHashLocation();
   
   // Handle GitHub Pages base path
   useEffect(() => {
-    // If we're on GitHub Pages and the URL doesn't have the base path
-    const basePath = "/ReadySetStartup";
-    const currentPath = window.location.pathname;
-    
-    // If we're on the 404 page at GitHub Pages root
-    if (currentPath === "/404.html" || currentPath === "/ReadySetStartup/404.html") {
-      window.location.href = `${basePath}/`;
+    // Special case for direct access to pages on GitHub
+    if (window.location.pathname.includes("/ReadySetStartup/") && 
+        window.location.pathname !== "/ReadySetStartup/" && 
+        !window.location.hash) {
+      // Extract the path after /ReadySetStartup/
+      const path = window.location.pathname.replace("/ReadySetStartup/", "");
+      if (path && path !== "index.html" && path !== "404.html") {
+        // Redirect to hash-based route
+        window.location.href = "/ReadySetStartup/#/" + path;
+      }
     }
   }, []);
   
