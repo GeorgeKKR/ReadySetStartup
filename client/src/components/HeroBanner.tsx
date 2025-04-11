@@ -72,7 +72,7 @@ const HeroBanner: React.FC = () => {
           className="absolute inset-0 w-full h-[120%]"
           style={{ y: isMounted ? backgroundY : 0 }}
         >
-          <div className="w-full h-full bg-[url('./assets/images/RSS Background.jpg')] bg-cover bg-center transform scale-110" />
+          <div className="w-full h-full bg-[url('/ReadySetStartup/assets/images/RSS Background.jpg')] bg-cover bg-center transform scale-110" />
         </motion.div>
         
         {/* Video background */}
@@ -83,7 +83,7 @@ const HeroBanner: React.FC = () => {
           loop
           muted={videoMuted}
           playsInline
-          poster="./assets/images/RSS Background.jpg"
+          poster="/ReadySetStartup/assets/images/RSS Background.jpg"
           onError={(e) => {
             // Hide video element if there's an error loading the sources
             if (e.currentTarget) {
@@ -93,8 +93,8 @@ const HeroBanner: React.FC = () => {
         >
           {/* Video sources - these may be excluded from GitHub due to size limitations */}
           {/* If you're deploying this project, you'll need to add these video files separately */}
-          <source src="./assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />
-          <source src="./assets/videos/Trailer.mp4" type="video/mp4" />
+          <source src="/ReadySetStartup/assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />
+          <source src="/ReadySetStartup/assets/videos/Trailer.mp4" type="video/mp4" />
         </video>
       </div>
       
