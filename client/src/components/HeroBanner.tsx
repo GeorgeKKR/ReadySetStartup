@@ -28,6 +28,8 @@ const HeroBanner: React.FC = () => {
   const [showTrailer, setShowTrailer] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [videoMuted, setVideoMuted] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const trailerRef = useRef<HTMLIFrameElement>(null);
   const backgroundVideoRef = useRef<HTMLVideoElement>(null);
   
@@ -42,9 +44,53 @@ const HeroBanner: React.FC = () => {
   const [isApplyHovered, setIsApplyHovered] = useState(false);
   const [isTrailerHovered, setIsTrailerHovered] = useState(false);
   
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobileDevice = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
+      const isSmallScreen = window.innerWidth < 768;
+      setIsMobile(isMobileDevice || isSmallScreen);
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    
+    // Handle video loading on mobile
+    if (backgroundVideoRef.current) {
+      if (isMobile) {
+        // For mobile, we'll use the poster image and not autoplay video
+        if (!backgroundVideoRef.current.paused) {
+          backgroundVideoRef.current.pause();
+        }
+      } else {
+        // For desktop, load and play the video
+        const loadVideo = async () => {
+          try {
+            if (backgroundVideoRef.current) {
+              // Only play if the user has interacted with the document
+              if (document.hasFocus()) {
+                await backgroundVideoRef.current.play();
+              }
+            }
+          } catch (error) {
+            console.error("Video autoplay failed:", error);
+          }
+          setVideoLoaded(true);
+        };
+        
+        loadVideo();
+      }
+    }
+  }, [isMobile]);
 
   // Handle closing trailer modal
   const handleCloseTrailer = () => {
@@ -63,6 +109,15 @@ const HeroBanner: React.FC = () => {
     }
   };
 
+  const handleVideoCanPlay = () => {
+    setVideoLoaded(true);
+    if (backgroundVideoRef.current && !isMobile && !videoMuted) {
+      backgroundVideoRef.current.play().catch(error => {
+        console.error("Video play failed:", error);
+      });
+    }
+  };
+
   return (
     <section className="relative pt-16 md:pt-0 h-screen overflow-hidden">
       {/* Background */}
@@ -75,52 +130,58 @@ const HeroBanner: React.FC = () => {
           <div className="w-full h-full bg-[url('/ReadySetStartup/assets/images/RSS Background.jpg')] bg-cover bg-center transform scale-110" />
         </motion.div>
         
-        {/* Video background */}
-        <video
-          ref={backgroundVideoRef}
-          className="absolute inset-0 w-full h-full object-cover z-[1]"
-          autoPlay
-          loop
-          muted={videoMuted}
-          playsInline
-          poster="/ReadySetStartup/assets/images/RSS Background.jpg"
-          onError={(e) => {
-            // Hide video element if there's an error loading the sources
-            if (e.currentTarget) {
-              e.currentTarget.style.display = 'none';
-            }
-          }}
-        >
-          {/* Video sources - these may be excluded from GitHub due to size limitations */}
-          {/* If you're deploying this project, you'll need to add these video files separately */}
-          <source src="/ReadySetStartup/assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />
-          <source src="/ReadySetStartup/assets/videos/Trailer.mp4" type="video/mp4" />
-        </video>
+        {/* Video background - Only load for non-mobile or if user has explicitly played it */}
+        {(!isMobile || videoLoaded) && (
+          <video
+            ref={backgroundVideoRef}
+            className="absolute inset-0 w-full h-full object-cover z-[1]"
+            autoPlay={!isMobile}
+            loop
+            muted={videoMuted}
+            playsInline
+            preload={isMobile ? "none" : "auto"}
+            poster="/ReadySetStartup/assets/images/RSS Background.jpg"
+            onCanPlay={handleVideoCanPlay}
+            onError={(e) => {
+              // Hide video element if there's an error loading the sources
+              if (e.currentTarget) {
+                e.currentTarget.style.display = 'none';
+              }
+            }}
+          >
+            {/* Video sources - these may be excluded from GitHub due to size limitations */}
+            {/* If you're deploying this project, you'll need to add these video files separately */}
+            {!isMobile && <source src="/ReadySetStartup/assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />}
+            <source src="/ReadySetStartup/assets/videos/Trailer.mp4" type="video/mp4" />
+          </video>
+        )}
       </div>
       
-      {/* Video controls */}
-      <motion.button 
-        onClick={toggleMute}
-        className="absolute bottom-8 right-8 z-30 p-3 bg-black/40 hover:bg-black/60 rounded-full transition-colors cursor-pointer"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        aria-label={videoMuted ? "Unmute background video" : "Mute background video"}
-      >
-        {videoMuted ? (
-          <VolumeX size={20} className="text-white/80" />
-        ) : (
-          <Volume2 size={20} className="text-white/80" />
-        )}
-      </motion.button>
+      {/* Video controls - only show if not mobile or if video is loaded */}
+      {(!isMobile || videoLoaded) && (
+        <motion.button 
+          onClick={toggleMute}
+          className="absolute bottom-8 right-8 z-30 p-3 bg-black/40 hover:bg-black/60 rounded-full transition-colors cursor-pointer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          aria-label={videoMuted ? "Unmute background video" : "Mute background video"}
+        >
+          {videoMuted ? (
+            <VolumeX size={20} className="text-white/80" />
+          ) : (
+            <Volume2 size={20} className="text-white/80" />
+          )}
+        </motion.button>
+      )}
       
       {/* Gradient overlay with increased opacity for better readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/70 to-primary z-10"></div>
       
-      {/* Dynamic overlay */}
+      {/* Dynamic overlay - darker on mobile for better readability */}
       <motion.div 
         className="absolute inset-0 bg-primary" 
-        style={{ opacity: isMounted ? opacityOverlay : 0.7 }}
+        style={{ opacity: isMounted ? (isMobile ? 0.8 : opacityOverlay) : 0.7 }}
       ></motion.div>
       
       {/* Content */}
@@ -149,7 +210,11 @@ const HeroBanner: React.FC = () => {
             <span className="text-[hsl(var(--accent-secondary))]">UK</span>
           </motion.h1>
           
-          <motion.div variants={textVariants} className="flex items-center gap-3 mb-3">
+          {/* Mobile-optimized ratings bar */}
+          <motion.div 
+            variants={textVariants} 
+            className={`flex ${isMobile ? 'flex-wrap' : ''} items-center gap-3 mb-3`}
+          >
             <div className="flex items-center gap-1 text-accent">
               <Star className="w-4 h-4 fill-accent" />
               <a 
@@ -161,7 +226,7 @@ const HeroBanner: React.FC = () => {
                 IMDb 8.2/10
               </a>
             </div>
-            <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+            {!isMobile && <div className="w-1 h-1 rounded-full bg-gray-400"></div>}
             <div className="flex items-center gap-1 text-[hsl(var(--accent-secondary))]">
               <Star className="w-4 h-4 fill-[hsl(var(--accent-secondary))]" />
               <a 
@@ -173,12 +238,24 @@ const HeroBanner: React.FC = () => {
                 Amazon 4.5/5
               </a>
             </div>
-            <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-            <div className="text-sm">2023</div>
-            <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-            <div className="text-sm">6 Episodes</div>
-            <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-            <div className="bg-accent/80 text-xs px-2 py-0.5 rounded">Reality-TV</div>
+            {!isMobile && (
+              <>
+                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                <div className="text-sm">2023</div>
+                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                <div className="text-sm">6 Episodes</div>
+                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                <div className="bg-accent/80 text-xs px-2 py-0.5 rounded">Reality-TV</div>
+              </>
+            )}
+            {isMobile && (
+              <div className="flex items-center gap-2 mt-2 w-full">
+                <div className="text-sm">2023</div>
+                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                <div className="text-sm">6 Episodes</div>
+                <div className="ml-auto bg-accent/80 text-xs px-2 py-0.5 rounded">Reality-TV</div>
+              </div>
+            )}
           </motion.div>
           
           <motion.p 
@@ -302,11 +379,10 @@ const HeroBanner: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
-          
         </motion.div>
       </div>
       
-      {/* Trailer Modal */}
+      {/* Trailer Modal - optimized for mobile */}
       <AnimatePresence>
         {showTrailer && (
           <motion.div
