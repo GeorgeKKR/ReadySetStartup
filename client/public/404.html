@@ -4,41 +4,13 @@
   <meta charset="utf-8">
   <title>Ready Set StartUP UK</title>
   <script type="text/javascript">
-    // SPA routing for GitHub Pages
-    // Based on https://github.com/rafgraph/spa-github-pages
-    (function() {
-      // This works for GitHub Pages when a custom domain is not used
-      const segmentCount = 1;
-      const l = window.location;
-      
-      // Extract the path from either a direct 404 on a path or from the path query parameter
-      const extractPath = () => {
-        // Check if we're being redirected with a path parameter
-        const pathParam = l.search.match(/(\?|&)path=([^&]+)/);
-        if (pathParam) return decodeURIComponent(pathParam[2]);
-        
-        // Otherwise, use the actual path but remove the /ReadySetStartup prefix if present
-        const path = l.pathname;
-        if (path.indexOf('/ReadySetStartup/') === 0) {
-          return path.replace('/ReadySetStartup/', '');
-        }
-        return path.replace('/ReadySetStartup', '');
-      };
-      
-      const path = extractPath();
-      
-      // Redirect to the home page with the correct segment configuration
-      const redirectUrl = 
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/' +
-        (path ? '#' + path : '');
-      
-      window.location.replace(redirectUrl);
-    })();
+    // Redirect to the main page but maintain the path
+    const path = window.location.pathname;
+    const redirectURL = window.location.origin + '/?path=' + encodeURIComponent(path);
+    window.location.replace(redirectURL);
   </script>
 </head>
 <body>
-  <h1>Redirecting...</h1>
-  <p>If you are not redirected automatically, please <a href="/ReadySetStartup/">click here</a>.</p>
+  <p>Redirecting...</p>
 </body>
 </html> 

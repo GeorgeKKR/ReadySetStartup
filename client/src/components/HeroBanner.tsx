@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Play, ChevronRight, X, Info, TrendingUp, Star, Film, Volume2, VolumeX } from 'lucide-react';
 import { Link } from 'wouter';
 import GlassCard from './GlassCard';
+import { getAssetPath } from '@/lib/assetPath';
 
 // Animation variants
 const textVariants = {
@@ -127,7 +128,9 @@ const HeroBanner: React.FC = () => {
           className="absolute inset-0 w-full h-[120%]"
           style={{ y: isMounted ? backgroundY : 0 }}
         >
-          <div className="w-full h-full bg-[url('/ReadySetStartup/assets/images/RSS Background.jpg')] bg-cover bg-center transform scale-110" />
+          <div className="w-full h-full bg-cover bg-center transform scale-110" style={{ 
+            backgroundImage: `url(${getAssetPath('assets/images/RSS Background.jpg')})` 
+          }} />
         </motion.div>
         
         {/* Video background - Only load for non-mobile or if user has explicitly played it */}
@@ -140,7 +143,7 @@ const HeroBanner: React.FC = () => {
             muted={videoMuted}
             playsInline
             preload={isMobile ? "none" : "auto"}
-            poster="/ReadySetStartup/assets/images/RSS Background.jpg"
+            poster={getAssetPath('assets/images/RSS Background.jpg')}
             onCanPlay={handleVideoCanPlay}
             onError={(e) => {
               // Hide video element if there's an error loading the sources
@@ -149,10 +152,9 @@ const HeroBanner: React.FC = () => {
               }
             }}
           >
-            {/* Video sources - these may be excluded from GitHub due to size limitations */}
-            {/* If you're deploying this project, you'll need to add these video files separately */}
-            {!isMobile && <source src="/ReadySetStartup/assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm" type="video/webm" />}
-            <source src="/ReadySetStartup/assets/videos/Trailer.mp4" type="video/mp4" />
+            {/* Video sources */}
+            {!isMobile && <source src={getAssetPath('assets/videos/Trailer - Season 1_ Ready Set StartUP UK_VP8.webm')} type="video/webm" />}
+            {/* MP4 fallback removed since file doesn't exist */}
           </video>
         )}
       </div>

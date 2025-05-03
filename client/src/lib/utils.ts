@@ -5,13 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Helper function to get the base path for GitHub Pages
+// Helper function to get the base path (empty for custom domain)
 export function getBasePath() {
-  // Check if we're in development or production
-  if (import.meta.env.DEV) {
-    return '';
-  }
-  
-  // In production (GitHub Pages), add the base path
-  return '/ReadySetStartup';
+  // Always return empty string since we're using a custom domain
+  return '';
 }

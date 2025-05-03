@@ -7,34 +7,40 @@
     <meta name="description" content="A thrilling business competition show where Britain's most ambitious entrepreneurs pitch their innovative startups to secure life-changing investments from industry giants." />
     
     <!-- Enhanced favicon setup with multiple sizes -->
-    <link rel="icon" type="image/png" href="/ReadySetStartup/assets/logos/LogoRssOrange (1).png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="/ReadySetStartup/assets/logos/LogoRssOrange (1).png" sizes="96x96" />
-    <link rel="icon" type="image/png" href="/ReadySetStartup/assets/logos/LogoRssOrange (1).png" sizes="128x128" />
-    <link rel="icon" type="image/png" href="/ReadySetStartup/assets/logos/LogoRssOrange (1).png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/assets/logos/LogoRssOrange (1).png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/assets/logos/LogoRssOrange (1).png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/assets/logos/LogoRssOrange (1).png" sizes="128x128" />
+    <link rel="icon" type="image/png" href="/assets/logos/LogoRssOrange (1).png" sizes="192x192" />
     <!-- Apple Touch Icon for iOS devices -->
-    <link rel="apple-touch-icon" href="/ReadySetStartup/assets/logos/LogoRssOrange (1).png" />
+    <link rel="apple-touch-icon" href="/assets/logos/LogoRssOrange (1).png" />
     <!-- Microsoft Tile for Windows -->
-    <meta name="msapplication-TileImage" content="/ReadySetStartup/assets/logos/LogoRssOrange (1).png" />
+    <meta name="msapplication-TileImage" content="/assets/logos/LogoRssOrange (1).png" />
     <meta name="msapplication-TileColor" content="#2d2d2d" />
     
-    <!-- GitHub Pages SPA redirect script -->
+    <!-- SPA redirect script for history API routes -->
     <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
+      // Single Page Apps for GitHub Pages or other static hosts
+      // Modified based on https://github.com/rafgraph/spa-github-pages
+      (function() {
+        // Check for path redirects from query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectPath = urlParams.get('path');
+        
+        if (redirectPath) {
+          // Clean the current URL by removing the path parameter
+          urlParams.delete('path');
+          const newSearch = urlParams.toString() ? `?${urlParams.toString()}` : '';
+          
+          // First replace the current URL without the path parameter
+          window.history.replaceState(null, null, window.location.pathname + newSearch);
+          
+          // Then push the actual path to history (will be handled by the router)
+          // We do this in the app component to ensure the router is initialized first
         }
-      }(window.location))
+      })();
     </script>
-    <!-- Base path for GitHub Pages -->
-    <base href="/ReadySetStartup/" />
+    <!-- Base path -->
+    <base href="/" />
   </head>
   <body>
     <div id="root"></div>

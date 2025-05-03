@@ -3,10 +3,12 @@ import react from "@vitejs/plugin-react";
 import themePlugin from "@replit/vite-plugin-shadcn-theme-json";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import assetResolverPlugin from "./vite-plugin-asset-resolver";
 
 export default defineConfig({
-  base: '/ReadySetStartup/',
+  base: '/',
   plugins: [
+    assetResolverPlugin(),
     react(),
     runtimeErrorOverlay(),
     themePlugin(),
@@ -27,8 +29,16 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
+  publicDir: path.resolve(import.meta.dirname, "client/public"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+  },
+  assetsInclude: ['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.svg', '**/*.webp'],
+  server: {
+    fs: {
+      // Allow serving files from one level up the project root, to access assets
+      allow: ['.', '..', '../..'],
+    },
   },
 });

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, PlayCircle } from 'lucide-react';
-import { useHashLocation } from '@/lib/useHashLocation';
+import { useRouter, Link } from '@/lib/router';
+import { getAssetPath } from '@/lib/assetPath';
+import { AppLink } from './AppLink';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location] = useHashLocation();
+  const { location } = useRouter();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -76,13 +78,13 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-2 flex flex-col md:flex-row items-center justify-between">
         {/* Logo */}
         <div className="flex items-center justify-between w-full md:w-auto">
-          <a href="/ReadySetStartup/#/" className="flex items-center">
+          <AppLink href="/" className="flex items-center">
             <img 
-              src="/ReadySetStartup/assets/logos/LogoRssWhite.png" 
+              src={getAssetPath('assets/logos/LogoRssWhite.png')} 
               alt="Ready Set StartUP UK Logo" 
               className="h-10 md:h-12"
             />
-          </a>
+          </AppLink>
           <button 
             className="md:hidden text-foreground text-xl p-2 rounded-full bg-black/20 hover:bg-black/30 transition-colors"
             onClick={toggleMenu}
@@ -95,15 +97,15 @@ const Header: React.FC = () => {
         {/* Navigation - increased text size to text-lg */}
         <nav className="hidden md:flex items-center space-x-8 text-lg font-semibold mt-4 md:mt-0">
           {navLinks.map((link) => (
-            <a 
+            <AppLink 
               key={link.path} 
-              href={`/ReadySetStartup/#${link.path}`}
+              href={link.path}
               className={`hover:text-[hsl(var(--accent-secondary))] transition-colors ${
                 location === link.path ? 'text-[hsl(var(--accent-secondary))]' : ''
               }`}
             >
               {link.name}
-            </a>
+            </AppLink>
           ))}
         </nav>
         
@@ -140,8 +142,8 @@ const Header: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 * navLinks.indexOf(link) }}
                   >
-                    <a 
-                      href={`/ReadySetStartup/#${link.path}`}
+                    <AppLink 
+                      href={link.path}
                       className={`block py-3 text-2xl font-semibold transition-colors ${
                         location === link.path 
                           ? 'text-[hsl(var(--accent-secondary))]' 
@@ -150,7 +152,7 @@ const Header: React.FC = () => {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {link.name}
-                    </a>
+                    </AppLink>
                     <div className="h-px bg-gray-800 mt-3"></div>
                   </motion.div>
                 ))}

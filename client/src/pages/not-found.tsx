@@ -47,7 +47,7 @@ export default function NotFound() {
         
         <AnimatedCard hoverEffect="all" className="inline-block">
           <Button asChild size="lg" variant="default" className="px-6">
-            <a href="/ReadySetStartup/#/" className="flex items-center gap-2">
+            <a href="/#/" className="flex items-center gap-2">
               <Home size={18} />
               <span>Back to Home</span>
             </a>

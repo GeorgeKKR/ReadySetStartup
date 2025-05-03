@@ -1,34 +1,36 @@
-import React from 'react';
-import { Link } from 'wouter';
-import { getBasePath } from '@/lib/utils';
+import { Link } from '@/lib/router';
+import { ReactNode } from 'react';
 
+/**
+ * Props for the AppLink component
+ */
 interface AppLinkProps {
   href: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   onClick?: () => void;
 }
 
 /**
- * A wrapper around wouter's Link component that handles GitHub Pages base path
+ * A wrapper around our Link component for routing
  */
-const AppLink: React.FC<AppLinkProps> = ({ href, children, className, onClick }) => {
-  // Get the base path for GitHub Pages
-  const basePath = getBasePath();
+export function AppLink({ href, children, className, onClick }: AppLinkProps) {
+  // Make sure the href starts with a slash for internal links
+  const formattedHref = href.startsWith('/') ? href : `/${href}`;
   
-  // If the href is a relative path (starts with /) and not the home path,
-  // we need to adjust the path for GitHub Pages
-  const adjustedHref = href.startsWith('/') ? href : `/${href}`;
+  // If it's an external link (starts with http or https), use a regular anchor tag
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    return (
+      <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  }
   
+  // Otherwise, use the Link component that works with our hash router
   return (
-    <Link 
-      href={adjustedHref}
-      className={className} 
-      onClick={onClick}
-    >
+    <Link href={formattedHref} className={className} onClick={onClick}>
       {children}
     </Link>
   );
-};
-
-export default AppLink; 
+} 

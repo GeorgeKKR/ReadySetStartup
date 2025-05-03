@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { episodes } from '@/data/episodes';
 import { Play, Calendar, Clock, Star, ExternalLink } from 'lucide-react';
 import ParallaxBackground from '@/components/ParallaxBackground';
+import { AppLink } from '@/components/AppLink';
+import { getAssetPath } from '@/lib/assetPath';
 
 const Seasons: React.FC = () => {
   // Only use Season 1 episodes
@@ -20,7 +22,7 @@ const Seasons: React.FC = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{ 
-            backgroundImage: `url('/assets/episodes/Episode 1.webp')`,
+            backgroundImage: `url(${getAssetPath('/assets/images/episode1.webp')})`,
             filter: 'blur(2px)',
             transform: 'scale(1.03)'
           }}
@@ -52,7 +54,7 @@ const Seasons: React.FC = () => {
               <div className="flex items-center gap-6 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-accent" />
-                  <span className="text-sm">January 2024</span>
+                  <span className="text-sm">2023</span>
                 </div>
                 <div className="hidden md:flex items-center gap-2">
                   <Clock className="h-4 w-4 text-accent" />
@@ -98,7 +100,7 @@ const Seasons: React.FC = () => {
                 
                 <div className="aspect-video">
                   <img 
-                    src={episode.thumbnail} 
+                    src={getAssetPath(episode.thumbnail)} 
                     alt={episode.title} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -163,13 +165,13 @@ const Seasons: React.FC = () => {
           <p className="text-gray-400 max-w-2xl mx-auto mb-6">
             Ready Set StartUP UK will return with a new season featuring fresh entrepreneurs and even bigger challenges. Stay tuned for updates!
           </p>
-          <a 
+          <AppLink 
             href="/apply" 
             className="inline-flex items-center gap-2 bg-accent/20 hover:bg-accent/30 text-accent px-6 py-3 rounded-full transition-colors"
           >
             <span>Apply for Season 2</span>
             <ExternalLink className="w-4 h-4" />
-          </a>
+          </AppLink>
         </motion.div>
       </div>
     </ParallaxBackground>

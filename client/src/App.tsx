@@ -1,10 +1,9 @@
-import { Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { queryClient } from "./lib/queryClient";
 import { AnimatePresence } from "framer-motion";
+import { Router, Switch, Route } from "./lib/router";
 import { useEffect } from "react";
-import { useHashLocation } from "@/lib/useHashLocation";
 
 import Home from "@/pages/Home";
 import Seasons from "@/pages/Seasons";
@@ -15,26 +14,32 @@ import Clips from "@/pages/Clips";
 import Resources from "@/pages/Resources";
 import Apply from "@/pages/Apply";
 import NotFound from "@/pages/not-found";
+import ImageTest from "@/pages/ImageTest";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 
-function Router() {
-  // Use hash-based routing for GitHub Pages
-  const [location] = useHashLocation();
-  
-  // Handle GitHub Pages base path
+// Get the base URL from environment for asset paths
+// This will be used to prefix asset URLs
+export const BASE_URL = import.meta.env.BASE_URL || '/';
+
+function AppRouter() {
+  // Handle redirects from GitHub Pages 404.html
   useEffect(() => {
-    // Special case for direct access to pages on GitHub
-    if (window.location.pathname.includes("/ReadySetStartup/") && 
-        window.location.pathname !== "/ReadySetStartup/" && 
-        !window.location.hash) {
-      // Extract the path after /ReadySetStartup/
-      const path = window.location.pathname.replace("/ReadySetStartup/", "");
-      if (path && path !== "index.html" && path !== "404.html") {
-        // Redirect to hash-based route
-        window.location.href = "/ReadySetStartup/#/" + path;
-      }
+    // Check if we were redirected with a path parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectPath = urlParams.get('path');
+    
+    if (redirectPath) {
+      // Remove the path parameter from the URL
+      urlParams.delete('path');
+      const newUrl = window.location.pathname + (urlParams.toString() ? `?${urlParams.toString()}` : '');
+      
+      // Replace the current URL without the path parameter
+      window.history.replaceState(null, '', newUrl);
+      
+      // Push the actual path to history
+      window.history.pushState(null, '', redirectPath);
     }
   }, []);
   
@@ -42,7 +47,7 @@ function Router() {
     <>
       <Header />
       <AnimatePresence mode="wait">
-        <Switch location={location} key={location}>
+        <Switch>
           <Route path="/">
             <PageTransition>
               <Home />
@@ -83,7 +88,12 @@ function Router() {
               <Apply />
             </PageTransition>
           </Route>
-          <Route>
+          <Route path="/image-test">
+            <PageTransition>
+              <ImageTest />
+            </PageTransition>
+          </Route>
+          <Route path="*">
             <PageTransition>
               <NotFound />
             </PageTransition>
@@ -98,7 +108,9 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
+      <Router>
+        <AppRouter />
+      </Router>
       <Toaster />
     </QueryClientProvider>
   );

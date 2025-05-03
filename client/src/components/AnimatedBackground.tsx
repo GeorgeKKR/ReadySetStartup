@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface AnimatedBackgroundProps {
@@ -24,6 +24,26 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   const dotSize = 1 + (intensity * 0.5); // 1.5-6px
   const dotSpacing = 30 - (intensity * 1.5); // 15-25px
   const animationDuration = 11 - speed; // 10-1s
+  
+  // Pre-compute wave parameters to prevent undefined values
+  const waveIntensity = useMemo(() => Math.max(20, intensity * 10), [intensity]); // 20-100px
+  
+  // Pre-compute wave paths to prevent undefined values in animation
+  const wavePath1 = useMemo(() => {
+    return {
+      start: `M0,50 C150,${100 - waveIntensity} 350,${100 + waveIntensity} 500,50 C650,${0 - waveIntensity} 850,${0 + waveIntensity} 1000,50 L1000,100 L0,100 Z`,
+      middle: `M0,50 C150,${100 + waveIntensity} 350,${100 - waveIntensity} 500,50 C650,${0 + waveIntensity} 850,${0 - waveIntensity} 1000,50 L1000,100 L0,100 Z`,
+      end: `M0,50 C150,${100 - waveIntensity} 350,${100 + waveIntensity} 500,50 C650,${0 - waveIntensity} 850,${0 + waveIntensity} 1000,50 L1000,100 L0,100 Z`
+    };
+  }, [waveIntensity]);
+  
+  const wavePath2 = useMemo(() => {
+    return {
+      start: `M0,60 C200,${120 - waveIntensity} 400,${120 + waveIntensity} 600,60 C800,${10 - waveIntensity} 1000,${10 + waveIntensity} 1200,60 L1200,100 L0,100 Z`,
+      middle: `M0,60 C200,${120 + waveIntensity} 400,${120 - waveIntensity} 600,60 C800,${10 + waveIntensity} 1000,${10 - waveIntensity} 1200,60 L1200,100 L0,100 Z`,
+      end: `M0,60 C200,${120 - waveIntensity} 400,${120 + waveIntensity} 600,60 C800,${10 - waveIntensity} 1000,${10 + waveIntensity} 1200,60 L1200,100 L0,100 Z`
+    };
+  }, [waveIntensity]);
   
   // Generate grid of dots
   const renderDots = () => {
@@ -94,19 +114,17 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   
   // Generate wave effect
   const renderWave = () => {
-    const waveIntensity = Math.max(20, intensity * 10); // 20-100px
-    
     return (
       <div className="absolute inset-0 overflow-hidden">
-        <svg className="absolute bottom-0 w-full h-full opacity-20" preserveAspectRatio="none">
+        <svg className="absolute bottom-0 w-full h-full opacity-20" preserveAspectRatio="none" viewBox="0 0 1200 100">
           <motion.path
-            d={`M0,50 C150,${100 - waveIntensity} 350,${100 + waveIntensity} 500,50 C650,${0 - waveIntensity} 850,${0 + waveIntensity} 1000,50 L1000,100 L0,100 Z`}
+            d={wavePath1.start}
             fill={color}
             animate={{
               d: [
-                `M0,50 C150,${100 - waveIntensity} 350,${100 + waveIntensity} 500,50 C650,${0 - waveIntensity} 850,${0 + waveIntensity} 1000,50 L1000,100 L0,100 Z`,
-                `M0,50 C150,${100 + waveIntensity} 350,${100 - waveIntensity} 500,50 C650,${0 + waveIntensity} 850,${0 - waveIntensity} 1000,50 L1000,100 L0,100 Z`,
-                `M0,50 C150,${100 - waveIntensity} 350,${100 + waveIntensity} 500,50 C650,${0 - waveIntensity} 850,${0 + waveIntensity} 1000,50 L1000,100 L0,100 Z`,
+                wavePath1.start,
+                wavePath1.middle,
+                wavePath1.end
               ]
             }}
             transition={{
@@ -116,13 +134,13 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
             }}
           />
           <motion.path
-            d={`M0,60 C200,${120 - waveIntensity} 400,${120 + waveIntensity} 600,60 C800,${10 - waveIntensity} 1000,${10 + waveIntensity} 1200,60 L1200,100 L0,100 Z`}
+            d={wavePath2.start}
             fill={secondaryColor}
             animate={{
               d: [
-                `M0,60 C200,${120 - waveIntensity} 400,${120 + waveIntensity} 600,60 C800,${10 - waveIntensity} 1000,${10 + waveIntensity} 1200,60 L1200,100 L0,100 Z`,
-                `M0,60 C200,${120 + waveIntensity} 400,${120 - waveIntensity} 600,60 C800,${10 + waveIntensity} 1000,${10 - waveIntensity} 1200,60 L1200,100 L0,100 Z`,
-                `M0,60 C200,${120 - waveIntensity} 400,${120 + waveIntensity} 600,60 C800,${10 - waveIntensity} 1000,${10 + waveIntensity} 1200,60 L1200,100 L0,100 Z`,
+                wavePath2.start,
+                wavePath2.middle,
+                wavePath2.end
               ]
             }}
             transition={{

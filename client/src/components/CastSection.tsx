@@ -9,7 +9,8 @@ import ImageHover from './ImageHover';
 import AnimatedCard from './AnimatedCard';
 import GlassCard from './GlassCard';
 import { ExternalLink, Linkedin, Twitter, ChevronDown, ChevronUp, Briefcase, Star } from 'lucide-react';
-import { Link } from 'wouter';
+import { AppLink } from './AppLink';
+import { getAssetPath } from '@/lib/assetPath';
 
 const CastSection: React.FC = () => {
   return (
@@ -219,7 +220,7 @@ const CastSection: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="md:w-1/3">
                 <img 
-                  src="/assets/episodes/Episode 2.webp" 
+                  src={getAssetPath('assets/episodes/Episode 2.webp')} 
                   alt="Ready Set StartUP UK" 
                   className="rounded-lg w-full"
                 />
@@ -246,8 +247,8 @@ const CastSection: React.FC = () => {
                   >
                     View on IMDb <Star size={14} className="ml-1" />
                   </a>
-                  <div className="text-sm bg-accent/20 hover:bg-accent/30 px-3 py-1.5 rounded-md transition-colors inline-flex items-center cursor-pointer" onClick={() => window.location.href = '/apply'}>
-                    Apply for Season 2
+                  <div className="text-sm bg-accent/20 hover:bg-accent/30 px-3 py-1.5 rounded-md transition-colors inline-flex items-center cursor-pointer">
+                    <AppLink href="/apply">Apply for Season 2</AppLink>
                   </div>
                 </div>
               </div>
